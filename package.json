@@ -1,0 +1,29 @@
+{
+  "name": "mysqltracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "mysql.js",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "figlet": "^1.2.4",
+    "inquirer": "^7.0.1",
+    "mysql": "^2.17.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon -r dotenv/config mysql.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NalinKane/mysqltracker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NalinKane/mysqltracker/issues"
+  },
+  "homepage": "https://github.com/NalinKane/mysqltracker#readme"
+}
