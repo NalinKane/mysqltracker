@@ -73,11 +73,26 @@ async function addRole(newRole) {
   }
 }
 
+async function updateEmployeeRole(employeeId, roleId) {
+  const db = makeDb();
+  try {
+    await db.query("UPDATE employee SET role_id = ? WHERE id = ?", [
+      roleId,
+      employeeId
+    ]);
+  } catch (err) {
+    throw new Error("Unable to add a new role", err);
+  } finally {
+    await db.close();
+  }
+}
+
 module.exports = {
   getAllEmployees,
   displayAllRoles,
   getAllDepartments,
   addDepartment,
   addEmployee,
-  addRole
+  addRole,
+  updateEmployeeRole
 };

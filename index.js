@@ -9,7 +9,8 @@ const {
   getAllDepartments,
   addDepartment,
   addEmployee,
-  addRole
+  addRole,
+  updateEmployeeRole
 } = require("./db");
 
 const questions = [
@@ -17,13 +18,23 @@ const questions = [
     type: "list",
     name: "choices",
     message: `What would you like to do?`,
-    choices: ["View all employees", "View all departments", "View all roles"]
+    choices: [
+      "View all employees",
+      "View all departments",
+      "View all roles",
+      "Quit"
+    ]
   },
   {
     type: "list",
     name: "additions",
     message: `What would you like to do?`,
-    choices: ["Add an employee", "Add a department", "Add a role"]
+    choices: [
+      "Add an employee",
+      "Add a department",
+      "Add a role",
+      "Update employee role"
+    ]
   },
 
   {
@@ -89,8 +100,11 @@ function handleChoice(choice) {
       addNewRole();
       break;
 
+    case "Update employee role":
+      updateRole();
+      break;
     default:
-      return;
+      return quit();
   }
 }
 
@@ -170,6 +184,43 @@ async function addNewRole() {
   handleChoice(initialQs);
 }
 
+async function updateRole() {
+  const allEmployees = await getAllEmployees();
+
+  const employeeList = allEmployees.map(({ id, first_name, last_name }) => ({
+    name: `${first_name} ${last_name}`,
+    value: id
+  }));
+
+  const { employeeId } = await prompt([
+    {
+      type: "list",
+      name: "employeeId",
+      message: "Which employee's role do you want to update?",
+      choices: employeeList
+    }
+  ]);
+
+  const roles = await displayAllRoles();
+
+  const roleChoices = roles.map(({ id, title }) => ({
+    name: title,
+    value: id
+  }));
+
+  const { roleId } = await prompt({
+    type: "list",
+    name: "roleId",
+    message: "What is the employee's new role?",
+    choices: roleChoices
+  });
+
+  await updateEmployeeRole(employeeId, roleId);
+
+  const initialQs = await displayInitialChoices();
+  handleChoice(initialQs);
+}
+
 async function displayInitialChoices() {
   const { choices } = await prompt(questions[0]);
   return choices;
@@ -178,6 +229,11 @@ async function displayInitialChoices() {
 async function displayAdditionChoices() {
   const { additions } = await prompt(questions[1]);
   return additions;
+}
+
+function quit() {
+  console.log("Mainframe terminated!");
+  process.exit();
 }
 
 init();
