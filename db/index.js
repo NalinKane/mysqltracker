@@ -62,21 +62,22 @@ async function addEmployee(newEmployee) {
   }
 }
 
-// async function addRole(newRole) {
-//   const db = makeDb();
-//   try {
-//     await db.query("INSERT INTO role SET ?", newRole);
-//   } catch (err) {
-//     throw new Error("Unable to add a new role", err);
-//   } finally {
-//     await db.close();
-//   }
-// }
+async function addRole(newRole) {
+  const db = makeDb();
+  try {
+    await db.query("INSERT INTO role SET ?", newRole);
+  } catch (err) {
+    throw new Error("Unable to add a new role", err);
+  } finally {
+    await db.close();
+  }
+}
 
 module.exports = {
   getAllEmployees,
   displayAllRoles,
   getAllDepartments,
   addDepartment,
-  addEmployee
+  addEmployee,
+  addRole
 };

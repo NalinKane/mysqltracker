@@ -8,7 +8,8 @@ const {
   displayAllRoles,
   getAllDepartments,
   addDepartment,
-  addEmployee
+  addEmployee,
+  addRole
 } = require("./db");
 
 const questions = [
@@ -37,6 +38,14 @@ const questions = [
   {
     name: "last_name",
     message: "What is the new employee's last name?"
+  },
+  {
+    name: "title",
+    message: "What is the name of this new role?"
+  },
+  {
+    name: "salary",
+    message: "How much does it pay?"
   }
 ];
 
@@ -74,6 +83,10 @@ function handleChoice(choice) {
       break;
     case "Add an employee":
       addNewEmployee();
+      break;
+
+    case "Add a role":
+      addNewRole();
       break;
 
     default:
@@ -127,6 +140,31 @@ async function addNewEmployee() {
   employee.role_id = roleId;
 
   await addEmployee(employee);
+
+  const initialQs = await displayInitialChoices();
+  handleChoice(initialQs);
+}
+
+async function addNewRole() {
+  const allDepartments = await getAllDepartments();
+
+  const departmentChoices = allDepartments.map(({ id, name }) => ({
+    name,
+    value: id
+  }));
+
+  const newRole = await prompt([
+    {
+      type: "list",
+      name: "department_id",
+      message: "Which department is the new role in?",
+      choices: departmentChoices
+    },
+    questions[5],
+    questions[6]
+  ]);
+
+  await addRole(newRole);
 
   const initialQs = await displayInitialChoices();
   handleChoice(initialQs);
